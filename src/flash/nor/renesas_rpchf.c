@@ -383,7 +383,7 @@ static int rpchf_target_write_memory(struct flash_bank *bank, target_addr_t addr
 	struct target *target = bank->target;
 	uint32_t wdata;
 
-	if (count != 2)
+	if (count != 1)
 		return ERROR_FAIL;
 
 	wdata = buffer[0] | (buffer[1] << 8);
