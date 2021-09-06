@@ -1,0 +1,36 @@
+Renesas RCar HyperFlash tool
+
+OpenOCD have embedded support for accessing HyperFlash on RCar Gen3
+devices (check "rpchf" flash driver). But it is quite slow, as it
+subclasses CFI and use direct register access. Tests shows write speed
+of 500 bytes/sec which is not enough for development purposes.
+
+This folder contains alternate means to work with
+HyperFlash. Basically this a piece of code that runs on target
+side. It is uploaded into target memory along with data to flash. Then
+script fill the registers with parameters for the tool and runs
+it. Tool should halt execution using "hlt" instruction and provide
+return code in x0.
+
+
+As it is working on target side, it can access MMIO registers much
+faster and it provides write speed of 50 Kb/sec.
+
+Contents of this directory:
+
+ - renesas_hf.c - source code for the tool
+
+ - renesas_hf.ld - linker script for the tool
+
+ - Makefile - this makefile will produce a binary that performs all the work
+
+ - hf_flash.tcl - debugger-side part of the tool. It provides number
+   of TCL procedures to work with the flash
+
+ - sample-flash-tee.tcl - sample script that re-flashes OP-TEE image on HyperFlash
+
+To use this tool run 'make' to build the binary. You can change
+cross-compiler by providing alternate CROSS_COMPILER variable value.
+
+Then you can use sample-flash-tee.tcl as a starting point to create
+own flash scripts.
